@@ -21,7 +21,8 @@ def myfunc(arg1, arg2):
 myqueue = WorkerQueue(myfunc, thread_count=2)
 
 for i in range(10):
-    myqueue.put((str(i), str(i * 2)))
+    myargs = i, i*2
+    myqueue.put(myargs)
 
 sleep(1)
 

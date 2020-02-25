@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="workerqueue",
-    version="0.0.0",
+    version="VERSION_SUBSTITUTION",
     author="Jaeseo Park",
     description="A thread-based worker queue",
     long_description=long_description,

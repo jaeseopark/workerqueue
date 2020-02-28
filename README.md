@@ -26,8 +26,8 @@ for i in range(10):
 
 sleep(1)
 
-print("Calling stop()...")
-myqueue.stop()
+print("Calling join()...")
+myqueue.join()
 
 print("Finished processing")
 ```

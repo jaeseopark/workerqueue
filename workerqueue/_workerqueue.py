@@ -1,7 +1,9 @@
-import time
+import logging
 from enum import Enum
 from queue import Queue
 from threading import Thread
+
+LOGGER = logging.getLogger(__name__)
 
 
 class WorkerQueue(Queue):
@@ -30,14 +32,14 @@ class WorkerQueue(Queue):
                 self.task_done()
             else:
                 break
+        LOGGER.debug("Exiting worker loop")
 
-    def stop(self):
+    def join(self):
         for i in range(len(self.threads)):
             # Send Signal.STOP to all threads
             self.put(WorkerQueue.Signal.STOP)
 
-        # wait for threads to shut off
-        time.sleep(1)
-
         for t in self.threads:
             t.join()
+
+        super().join()

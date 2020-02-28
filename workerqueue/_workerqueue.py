@@ -6,9 +6,11 @@ from threading import Thread
 LOGGER = logging.getLogger(__name__)
 
 
+class _Signal(Enum):
+    STOP = 0
+
+
 class WorkerQueue(Queue):
-    class Signal(Enum):
-        STOP = "WorkerQueueSignalSTOP"
 
     def __init__(self, func, thread_count=1, parse_tuple=True):
         Queue.__init__(self)
@@ -24,7 +26,7 @@ class WorkerQueue(Queue):
     def _worker_loop(self):
         while True:
             item = self.get()
-            if item != WorkerQueue.Signal.STOP:
+            if not isinstance(item, _Signal) and item != _Signal.STOP:
                 if self.parse_tuple:
                     self.func(*item)
                 else:
@@ -37,7 +39,7 @@ class WorkerQueue(Queue):
     def join(self):
         for i in range(len(self.threads)):
             # Send Signal.STOP to all threads
-            self.put(WorkerQueue.Signal.STOP)
+            self.put(_Signal.STOP)
 
         for t in self.threads:
             t.join()
